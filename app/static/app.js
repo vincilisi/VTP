@@ -223,10 +223,11 @@ if (canvas) {
     }
 
     canvas.addEventListener(
-        "mousedown",
+        "pointerdown",
         (e) => {
 
             disegnando = true;
+            canvas.setPointerCapture(e.pointerId);
 
             const p =
                 getPos(e);
@@ -241,7 +242,7 @@ if (canvas) {
     );
 
     canvas.addEventListener(
-        "mousemove",
+        "pointermove",
         (e) => {
 
             if (
@@ -267,15 +268,23 @@ if (canvas) {
         }
     );
 
-    canvas.addEventListener(
-        "mouseup",
-        () => {
+    function terminaFirma(e) {
 
-            disegnando = false;
-
-            salvaFirma();
+        if (!disegnando) {
+            return;
         }
-    );
+
+        disegnando = false;
+
+        if (canvas.hasPointerCapture(e.pointerId)) {
+            canvas.releasePointerCapture(e.pointerId);
+        }
+
+        salvaFirma();
+    }
+
+    canvas.addEventListener("pointerup", terminaFirma);
+    canvas.addEventListener("pointercancel", terminaFirma);
 
     function salvaFirma() {
 
