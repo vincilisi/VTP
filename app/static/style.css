@@ -1,0 +1,71 @@
+:root { --ink:#142c32; --muted:#667b7f; --line:#d6e1de; --panel:#fff; --teal:#0b5f64; --teal-dark:#084b4f; --orange:#e96d3f; --soft-teal:#e2f0ed; --shadow:0 14px 38px rgba(20,44,50,.08); }
+* { box-sizing:border-box; }
+body { margin:0; color:var(--ink); background:linear-gradient(120deg,#f4f7f4 0%,#edf4f1 52%,#f9f4ea 100%); font-family:Georgia,"Times New Roman",serif; }
+button,input { font:inherit; }
+button { cursor:pointer; }
+.shell { width:min(1120px,calc(100% - 40px)); margin:0 auto; }
+.app-header { background:var(--ink); color:#fff; border-bottom:4px solid var(--orange); }
+.header-content { min-height:76px; display:flex; align-items:center; justify-content:space-between; gap:24px; }
+.brand { color:inherit; text-decoration:none; display:flex; align-items:center; gap:12px; font-family:Arial,sans-serif; }
+.brand-mark { display:grid; place-items:center; width:36px; height:36px; background:var(--orange); color:#fff; font-weight:800; }
+.brand strong,.brand small { display:block; }
+.brand strong { font-size:1.05rem; }
+.brand small { margin-top:2px; color:#b9cdca; font-size:.76rem; }
+.header-actions { display:flex; gap:10px; align-items:center; font-family:Arial,sans-serif; }
+.status-pill { border:1px solid #5f807d; color:#d5e7e4; padding:6px 10px; font-size:.75rem; }
+.icon-button { border:1px solid #d8ebe7; background:transparent; color:#fff; padding:7px 10px; font-size:.75rem; }
+.icon-button:hover { background:#26464a; }
+.workspace { padding:52px 0 64px; }
+.intro { max-width:720px; margin-bottom:34px; }
+.eyebrow,.step { margin:0 0 8px; color:var(--teal); font-family:Arial,sans-serif; font-weight:700; font-size:.72rem; text-transform:uppercase; }
+h1,h2,p { margin-top:0; }
+h1 { margin-bottom:10px; font-size:clamp(2.3rem,5vw,4.1rem); line-height:.98; }
+h2 { margin-bottom:0; font-size:1.36rem; }
+.intro > p:last-child { margin-bottom:0; color:var(--muted); font-size:1.06rem; line-height:1.5; }
+.workflow { display:grid; grid-template-columns:minmax(0,1.65fr) minmax(290px,.85fr); gap:20px; align-items:start; }
+.panel,.results-panel { border:1px solid var(--line); background:var(--panel); box-shadow:var(--shadow); }
+.panel { padding:26px; }
+.panel-heading,.section-heading { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; }
+.panel-heading { margin-bottom:24px; }
+.text-button { padding:0; border:0; background:transparent; color:var(--teal); font-family:Arial,sans-serif; font-size:.83rem; font-weight:700; text-decoration:underline; text-underline-offset:3px; }
+.text-button.subtle { color:var(--muted); }
+.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+label { color:var(--ink); font-family:Arial,sans-serif; font-size:.8rem; font-weight:700; }
+input[type="text"] { width:100%; margin-top:7px; border:1px solid #b9cbc7; background:#fbfdfc; padding:12px; color:var(--ink); font-size:.94rem; outline:0; }
+input[type="text"]:focus { border-color:var(--teal); box-shadow:0 0 0 3px rgba(11,95,100,.12); }
+.signature-section { margin-top:24px; }
+.field-label-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:7px; }
+#firma { display:block; width:100%; height:150px; border:1px dashed #9db6b0; background:#fcfdfc; touch-action:none; }
+.upload-panel { min-height:100%; display:flex; flex-direction:column; }
+.upload-zone { display:flex; align-items:center; gap:13px; padding:20px 14px; border:1px dashed #8ba7a1; background:#f6faf8; cursor:pointer; }
+.upload-zone:hover { border-color:var(--teal); background:var(--soft-teal); }
+.upload-zone input { position:absolute; width:1px; height:1px; overflow:hidden; opacity:0; }
+.upload-icon { display:grid; place-items:center; flex:0 0 auto; width:42px; height:42px; color:#fff; background:var(--orange); font-size:.68rem; }
+.upload-zone strong,.upload-zone small { display:block; }
+.upload-zone strong { font-size:.9rem; }
+.upload-zone small { margin-top:3px; color:var(--muted); font-size:.75rem; font-weight:400; }
+.primary-button { border:1px solid var(--teal); background:var(--teal); color:#fff; padding:12px 17px; font-family:Arial,sans-serif; font-size:.84rem; font-weight:700; }
+.primary-button:hover:not(:disabled) { background:var(--teal-dark); border-color:var(--teal-dark); }
+.primary-button:disabled { cursor:not-allowed; opacity:.48; }
+.upload-panel .primary-button { width:100%; margin-top:16px; }
+.helper-text { margin:16px 0 0; color:var(--muted); font-family:Arial,sans-serif; font-size:.8rem; line-height:1.5; }
+.helper-text.error { color:#aa3f22; }
+.results-section { margin-top:46px; }
+.section-heading { align-items:end; margin-bottom:15px; }
+.download-button { min-width:142px; }
+.table-wrap { overflow-x:auto; }
+table { width:100%; border-collapse:collapse; min-width:700px; }
+th,td { padding:15px 17px; border-bottom:1px solid var(--line); text-align:left; }
+th { color:var(--muted); background:#f7faf8; font-family:Arial,sans-serif; font-size:.72rem; text-transform:uppercase; }
+td { font-family:Arial,sans-serif; font-size:.88rem; }
+td:nth-child(2) { max-width:600px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.empty-row td { padding:36px 17px; color:var(--muted); text-align:center; }
+.totals { display:grid; grid-template-columns:1fr 1fr 1.25fr; background:#edf4f1; }
+.totals > div { padding:17px; border-right:1px solid #d5e3df; font-family:Arial,sans-serif; }
+.totals > div:last-child { border-right:0; }
+.totals span,.totals strong { display:block; }
+.totals span { color:var(--muted); font-size:.72rem; text-transform:uppercase; }
+.totals strong { margin-top:4px; color:var(--ink); font-size:1.04rem; }
+.total-main { background:var(--teal); }
+.total-main span,.total-main strong { color:#fff; }
+@media (max-width:760px) { .shell { width:min(100% - 28px,1120px); } .header-content { min-height:66px; } .workspace { padding:35px 0 44px; } .workflow { grid-template-columns:1fr; } .panel { padding:20px; } .form-grid { grid-template-columns:1fr; } .section-heading { align-items:flex-start; flex-direction:column; } .download-button { width:100%; } .totals { grid-template-columns:1fr; } .totals > div { border-right:0; border-bottom:1px solid #d5e3df; } .totals > div:last-child { border-bottom:0; } #firma { height:130px; } }
