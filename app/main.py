@@ -62,35 +62,20 @@ def service_worker():
 
 def parse_services(text: str):
     rows = []
-    daily_services = []
-    current_day = None
-    current_lines = []
+    day_pattern = re.compile(
+        r"(?<!\d)(\d{1,2})\s+(?:LUN|MAR|MER|GIO|VEN|SAB|DOM)\b",
+        flags=re.IGNORECASE
+    )
+    day_matches = list(day_pattern.finditer(text))
 
-    for line in text.splitlines():
-        service = " ".join(line.split())
-
-        if not service:
-            continue
-
-        day_match = re.match(
-            r"(\d{1,2})\s+(?:LUN|MAR|MER|GIO|VEN|SAB|DOM)\b",
-            service,
-            flags=re.IGNORECASE
+    for index, day_match in enumerate(day_matches):
+        end = (
+            day_matches[index + 1].start()
+            if index + 1 < len(day_matches)
+            else len(text)
         )
-
-        if day_match:
-            if current_day is not None:
-                daily_services.append((current_day, " ".join(current_lines)))
-
-            current_day = day_match.group(1)
-            current_lines = [service]
-        elif current_day is not None:
-            current_lines.append(service)
-
-    if current_day is not None:
-        daily_services.append((current_day, " ".join(current_lines)))
-
-    for giorno, service in daily_services:
+        giorno = day_match.group(1)
+        service = " ".join(text[day_match.start():end].split())
         upper = service.upper()
 
         if "VENEZIA TERMINAL PASSEGGERI" not in upper:
