@@ -212,13 +212,9 @@ if (canvas) {
 
         return {
 
-            x:
-                e.clientX -
-                rect.left,
+            x: (e.clientX - rect.left) * (canvas.width / rect.width),
 
-            y:
-                e.clientY -
-                rect.top
+            y: (e.clientY - rect.top) * (canvas.height / rect.height)
         };
     }
 
@@ -226,8 +222,14 @@ if (canvas) {
         "pointerdown",
         (e) => {
 
+            e.preventDefault();
             disegnando = true;
-            canvas.setPointerCapture(e.pointerId);
+
+            try {
+                canvas.setPointerCapture(e.pointerId);
+            } catch (error) {
+                // Safari can draw without pointer capture.
+            }
 
             const p =
                 getPos(e);
@@ -250,6 +252,8 @@ if (canvas) {
             ) {
                 return;
             }
+
+            e.preventDefault();
 
             const p =
                 getPos(e);
@@ -276,15 +280,19 @@ if (canvas) {
 
         disegnando = false;
 
-        if (canvas.hasPointerCapture(e.pointerId)) {
-            canvas.releasePointerCapture(e.pointerId);
+        try {
+            if (canvas.hasPointerCapture(e.pointerId)) {
+                canvas.releasePointerCapture(e.pointerId);
+            }
+        } catch (error) {
+            // Pointer capture is optional for touch drawing.
         }
 
         salvaFirma();
     }
 
-    canvas.addEventListener("pointerup", terminaFirma);
-    canvas.addEventListener("pointercancel", terminaFirma);
+    canvas.addEventListener("pointerup", terminaFirma, { passive: false });
+    canvas.addEventListener("pointercancel", terminaFirma, { passive: false });
 
     function salvaFirma() {
 

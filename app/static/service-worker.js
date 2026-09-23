@@ -1,4 +1,4 @@
-const CACHE_NAME = "vtp-servizi-v1";
+const CACHE_NAME = "vtp-servizi-v2";
 const APP_SHELL = [
     "/",
     "/static/style.css",
