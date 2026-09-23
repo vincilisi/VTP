@@ -62,23 +62,39 @@ def service_worker():
 
 def parse_services(text: str):
     rows = []
+    daily_services = []
+    current_day = None
+    current_lines = []
 
     for line in text.splitlines():
         service = " ".join(line.split())
-        upper = service.upper()
 
-        if "VENEZIA TERMINAL PASSEGGERI" not in upper:
+        if not service:
             continue
 
         day_match = re.match(
             r"(\d{1,2})\s+(?:LUN|MAR|MER|GIO|VEN|SAB|DOM)\b",
-            upper
+            service,
+            flags=re.IGNORECASE
         )
 
-        if not day_match:
-            continue
+        if day_match:
+            if current_day is not None:
+                daily_services.append((current_day, " ".join(current_lines)))
 
-        giorno = day_match.group(1)
+            current_day = day_match.group(1)
+            current_lines = [service]
+        elif current_day is not None:
+            current_lines.append(service)
+
+    if current_day is not None:
+        daily_services.append((current_day, " ".join(current_lines)))
+
+    for giorno, service in daily_services:
+        upper = service.upper()
+
+        if "VENEZIA TERMINAL PASSEGGERI" not in upper:
+            continue
 
         aviaria = 0
         radiogeno = 0
@@ -123,7 +139,7 @@ async def estrai(
         for page in pdf.pages:
 
             text += (
-                page.extract_text(layout=True)
+                page.extract_text()
                 or ""
             ) + "\n"
 
