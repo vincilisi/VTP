@@ -60,6 +60,52 @@ def service_worker():
     )
 
 
+def service_row(giorno: str, service: str):
+    upper = service.upper()
+
+    if "VENEZIA TERMINAL PASSEGGERI" not in upper:
+        return None
+
+    aviaria = 0
+    radiogeno = 0
+
+    if "SALONI" in upper:
+        aviaria = 15
+
+    if "USCITA SALONI" in upper:
+        aviaria = 15
+
+    if "RXM" in upper or "RXP" in upper:
+        radiogeno = 2
+
+    return {
+        "giorno": giorno,
+        "servizio": service,
+        "aviaria": aviaria,
+        "radiogeno": radiogeno
+    }
+
+
+def parse_table_services(table):
+    rows = []
+
+    for table_row in table:
+        cells = [" ".join((cell or "").split()) for cell in table_row]
+        service = " ".join(cells)
+
+        if "VENEZIA TERMINAL PASSEGGERI" not in service.upper():
+            continue
+
+        day_match = re.search(r"\b(\d{1,2})\b", service)
+        giorno = day_match.group(1) if day_match else ""
+        row = service_row(giorno, service)
+
+        if row:
+            rows.append(row)
+
+    return rows
+
+
 def parse_services(text: str):
     rows = []
     day_pattern = re.compile(
@@ -76,34 +122,10 @@ def parse_services(text: str):
         )
         giorno = day_match.group(1)
         service = " ".join(text[day_match.start():end].split())
-        upper = service.upper()
+        row = service_row(giorno, service)
 
-        if "VENEZIA TERMINAL PASSEGGERI" not in upper:
-            continue
-
-        aviaria = 0
-        radiogeno = 0
-
-        if "SALONI" in upper:
-            aviaria = 15
-
-        if "USCITA SALONI" in upper:
-            aviaria = 15
-
-        if (
-            "RXM" in upper or
-            "RXP" in upper
-        ):
-            radiogeno = 2
-
-        rows.append(
-            {
-                "giorno": giorno,
-                "servizio": service,
-                "aviaria": aviaria,
-                "radiogeno": radiogeno
-            }
-        )
+        if row:
+            rows.append(row)
 
     return rows
 
@@ -119,16 +141,16 @@ async def estrai(
         io.BytesIO(content)
     ) as pdf:
 
-        text = ""
+        rows = []
 
         for page in pdf.pages:
+            tables = page.extract_tables()
 
-            text += (
-                page.extract_text()
-                or ""
-            ) + "\n"
-
-    rows = parse_services(text)
+            if tables:
+                for table in tables:
+                    rows.extend(parse_table_services(table))
+            else:
+                rows.extend(parse_services(page.extract_text() or ""))
 
     return {
         "ok": True,
